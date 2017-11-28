@@ -20,8 +20,11 @@
 	"jest": {
 		"collectCoverage": true,
 		"transform": {
-			".js": "babel-jest"
-		}
+			".js": "babel-jest",
+			"^.+\\.tsx?$": "ts-jest"
+		},
+		"testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+		"moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
 	},
 	"lint-staged": {
 		"*.{js,json,css,md}": ["prettier --write", "git add"]
@@ -57,6 +60,7 @@
 		"lint-staged": "^5.0.0",
 		"node-fetch": "^1.7.3",
 		"prettier": "^1.8.2",
+		"ts-jest": "^21.2.3",
 		"typescript": "^2.6.2"
 	},
 	"dependencies": {
