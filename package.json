@@ -14,7 +14,7 @@
 		"test:unit": "jest --forceExit --no-coverage",
 		"test": "npm run test:unit",
 		"fmt":
-			"./node_modules/.bin/prettier --write **/*.{js,json,css,md} && ./node_modules/.bin/prettier --write src/{__tests__,__mocks__,testUtils}/**/*.{js,json,css,md}"
+			"./node_modules/.bin/prettier --write **/*.{ts,js,json,css,md} && ./node_modules/.bin/prettier --write src/{__tests__,__mocks__,testUtils}/**/*.{ts,js,json,css,md}"
 	},
 	"files": ["README.md", "lib/"],
 	"jest": {
