@@ -5,7 +5,7 @@
 		"A set of tools to add performance tracing to your React or React Native application",
 	"main": "lib/index.js",
 	"scripts": {
-		"build": "tsc && rm -rf lib/__tests__",
+		"build": "./node_modules/.bin/tsc && rm -rf lib/__tests__",
 		"contributor:add": "all-contributors add",
 		"contributor:generate": "all-contributors generate",
 		"precommit": "lint-staged",
