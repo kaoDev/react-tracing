@@ -1,8 +1,9 @@
 // @flow
-import * as OpentracingZipkin from "zipkin-javascript-opentracing";
+import * as Tracer from "zipkin-javascript-opentracing";
 import * as zipkin from "zipkin";
 import { HttpLogger } from "zipkin-transport-http";
 import Stack from "./stack";
+import { TraceId } from "zipkin";
 
 const defaultGetSpanName = ({
 	url,
@@ -18,23 +19,21 @@ export interface Span {
 	name?: string;
 	log({ [string]: string }): void;
 	finish(): void;
+	id: TraceId;
+
+	setTag(key: string, value: any): void;
 }
 
 type startSpanOptions = {
 	childOf?: Span;
 };
 
-interface TracerType {
-	startSpan(spanName: string, options?: startSpanOptions): Span;
-	inject(span: Span, format: string, headers: object): void;
-}
-
 type FetchImplementationType = (
 	endpoint: string,
 	args?: object
 ) => Promise<any>;
 type ExplicitTracerDeclaration = {
-	tracer: TracerType;
+	tracer: Tracer;
 };
 
 type ImplicitTracerDeclaration = {
@@ -63,14 +62,14 @@ type InitGlobalNetworkTracerOptions = {
 
 class Tracing {
 	stack: Stack<Span>;
-	tracer: TracerType;
+	tracer: Tracer;
 
 	private _tracing_current_span?: Span;
 
 	constructor(options: TracerOptions) {
 		this.tracer =
 			options.tracer ||
-			OpentracingZipkin({
+			new Tracer({
 				serviceName: (options as ImplicitTracerDeclaration)
 					.serviceName,
 				recorder: new zipkin.BatchRecorder({
@@ -115,11 +114,7 @@ class Tracing {
 				this._tracing_current_span
 			);
 			const headers = options.headers || {};
-			this.tracer.inject(
-				span,
-				OpentracingZipkin.FORMAT_HTTP_HEADERS,
-				headers
-			);
+			this.tracer.inject(span, Tracer.FORMAT_HTTP_HEADERS, headers);
 
 			const success = (
 				span: startSpanOptions & Span,
